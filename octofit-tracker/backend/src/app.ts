@@ -1,6 +1,6 @@
 import express, { type ErrorRequestHandler } from 'express';
 import mongoose from 'mongoose';
-import { apiBaseUrl, frontendOrigin } from './config/api';
+import { frontendOrigin } from './config/api';
 import apiRouter from './routes';
 
 const app = express();
@@ -24,18 +24,18 @@ app.use((request, response, next) => {
 
 app.use(express.json());
 
-app.get('/api/health', (_request, response) => {
+app.get('/api/health', (request, response) => {
   response.json({
     status: 'ok',
     service: 'octofit-api',
-    apiBaseUrl,
+    apiBaseUrl: request.app.locals.apiBaseUrl,
     database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
   });
 });
 
-app.get('/api', (_request, response) => {
+app.get('/api', (request, response) => {
   response.json({
-    apiBaseUrl,
+    apiBaseUrl: request.app.locals.apiBaseUrl,
     endpoints: [
       '/api/users/',
       '/api/teams/',
