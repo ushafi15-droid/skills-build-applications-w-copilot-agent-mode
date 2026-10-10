@@ -1,16 +1,32 @@
-# React + Vite
+# OctoFit Tracker frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The React 19 presentation tier uses Vite, Bootstrap, and React Router to show
+activities, the leaderboard, teams, users, and workouts from the API.
 
-Currently, two official plugins are available:
+## API configuration
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+When running the frontend in Codespaces, define `VITE_CODESPACE_NAME` in
+`octofit-tracker/frontend/.env.local` using the value of the Codespaces
+`CODESPACE_NAME` environment variable:
 
-## React Compiler
+```dotenv
+VITE_CODESPACE_NAME=your-codespace-name
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Vite exposes this setting to the frontend as `import.meta.env.VITE_CODESPACE_NAME`.
+It must be defined for a production build served outside the Vite development
+server. If it is missing or invalid, the frontend uses `http://localhost:8000`
+as a safe API fallback.
 
-## Expanding the ESLint configuration
+During development, the browser requests same-origin `/api/` URLs and Vite
+proxies them to `http://localhost:8000`. This avoids cross-origin browser
+requests and requires the backend to be running locally on port `8000`.
+Restart the Vite development server after changing `.env.local` or `vite.config.js`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Development
+
+```bash
+npm run dev --prefix octofit-tracker/frontend
+```
+
+The API should be available on port `8000`.

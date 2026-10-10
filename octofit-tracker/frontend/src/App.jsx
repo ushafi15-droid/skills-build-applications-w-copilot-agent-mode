@@ -1,42 +1,60 @@
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, NavLink, Route, Routes } from 'react-router-dom'
 import octofitLogo from '../../../docs/octofitapp-small.png'
+import Activities from './components/Activities.jsx'
+import Leaderboard from './components/Leaderboard.jsx'
+import Teams from './components/Teams.jsx'
+import Users from './components/Users.jsx'
+import Workouts from './components/Workouts.jsx'
 
-const sections = ['activities', 'leaderboard', 'teams', 'users', 'workouts']
+const sections = [
+  { label: 'Activities', path: 'activities', component: Activities },
+  { label: 'Leaderboard', path: 'leaderboard', component: Leaderboard },
+  { label: 'Teams', path: 'teams', component: Teams },
+  { label: 'Users', path: 'users', component: Users },
+  { label: 'Workouts', path: 'workouts', component: Workouts },
+]
 
 function App() {
   return (
     <BrowserRouter>
-      <header className="navbar navbar-expand border-bottom bg-white">
-        <div className="container">
-          <NavLink className="navbar-brand fw-semibold" to="/">
-            <img alt="" className="me-2" height="36" src={octofitLogo} width="36" />
-            OctoFit Tracker
-          </NavLink>
-          <nav className="navbar-nav flex-row gap-3 overflow-auto">
-            {sections.map((section) => (
-              <NavLink
-                className="nav-link text-capitalize"
-                key={section}
-                to={`/${section}`}
-              >
-                {section}
-              </NavLink>
+      <div className="min-vh-100">
+        <header className="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
+          <div className="container">
+            <NavLink className="navbar-brand d-flex align-items-center fw-semibold" to="/">
+              <img
+                alt=""
+                className="me-2"
+                height="40"
+                src={octofitLogo}
+                width="40"
+              />
+              OctoFit Tracker
+            </NavLink>
+            <nav aria-label="Main navigation" className="navbar-nav flex-row gap-2 overflow-auto">
+              {sections.map(({ label, path }) => (
+                <NavLink
+                  className={({ isActive }) =>
+                    `nav-link text-nowrap ${isActive ? 'active fw-semibold' : ''}`
+                  }
+                  key={path}
+                  to={`/${path}`}
+                >
+                  {label}
+                </NavLink>
+              ))}
+            </nav>
+          </div>
+        </header>
+        <main className="container py-4">
+          <Routes>
+            <Route element={<Navigate replace to="/activities" />} path="/" />
+            {sections.map(({ component: Section, path }) => (
+              <Route element={<Section />} key={path} path={`/${path}`} />
             ))}
-          </nav>
-        </div>
-      </header>
-      <main className="container py-4">
-        <Routes>
-          <Route path="/" element={<h1 className="h3">Dashboard</h1>} />
-          {sections.map((section) => (
-            <Route
-              element={<h1 className="h3 text-capitalize">{section}</h1>}
-              key={section}
-              path={`/${section}`}
-            />
-          ))}
-        </Routes>
-      </main>
+            <Route element={<h1 className="h3">Page not found</h1>} path="*" />
+          </Routes>
+        </main>
+      </div>
     </BrowserRouter>
   )
 }

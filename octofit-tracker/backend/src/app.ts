@@ -7,7 +7,7 @@ const app = express();
 
 app.use((request, response, next) => {
   const origin = request.get('origin');
-  if (origin === frontendOrigin) {
+  if (origin && [frontendOrigin, 'http://localhost:5173'].includes(origin)) {
     response.setHeader('Access-Control-Allow-Origin', origin);
     response.setHeader('Vary', 'Origin');
     response.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -33,8 +33,9 @@ app.get('/api/health', (request, response) => {
   });
 });
 
-app.get('/api', (request, response) => {
+const apiIndex = (request: express.Request, response: express.Response) => {
   response.json({
+    service: 'octofit-api',
     apiBaseUrl: request.app.locals.apiBaseUrl,
     endpoints: [
       '/api/users/',
@@ -44,7 +45,10 @@ app.get('/api', (request, response) => {
       '/api/workouts/',
     ],
   });
-});
+};
+
+app.get('/', apiIndex);
+app.get('/api', apiIndex);
 
 app.use(apiRouter);
 
