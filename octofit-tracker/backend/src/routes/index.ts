@@ -25,10 +25,10 @@ function collectionRouter(model: Model<unknown>): Router {
 
 const router = Router();
 
-router.use('/users', collectionRouter(User));
-router.use('/teams', collectionRouter(Team));
-router.use('/activities', collectionRouter(Activity));
-router.use('/leaderboard', collectionRouter(Leaderboard));
-router.use('/workouts', collectionRouter(Workout));
+router.use('/api/users', collectionRouter(User));
+router.use('/api/teams', collectionRouter(Team));
+router.use('/api/activities', collectionRouter(Activity));
+router.use('/api/leaderboard', collectionRouter(Leaderboard));
+router.use('/api/workouts', collectionRouter(Workout));
 
 export default router;

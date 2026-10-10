@@ -46,7 +46,7 @@ app.get('/api', (_request, response) => {
   });
 });
 
-app.use('/api', apiRouter);
+app.use(apiRouter);
 
 app.use((_request, response) => {
   response.status(404).json({ error: 'Route not found' });
